@@ -33,24 +33,57 @@
     </div>
   </div>
 </nav>
+<h1 class="mt-3">Welcome, <c:out value="${user.firstName}" /></h1>
 <h3 class="m-5 text-info">Playdates in your area</h3>
 <table class="table-success col-5 m-5 table-hover">
 
   <thead>
  
     <tr>
-      <th scope="col">#</th>
       <th scope="col">Playdate</th>
       <th scope="col">Action</th>
     </tr>
   </thead>
   <tbody>
-    <tr>
-      <th scope="row">1</th>
-      <td>PlayDate</td>
-      <td><a href="/join">Join</a></td>
-    </tr>
-      </tbody>
+  	<c:forEach items="${allPlaydates}" var="playdate">
+	<c:if test="${user.city == playdate.city }">
+	    <tr>
+	      <th scope="row">1</th>
+	      <td><c:out value="${playdate.name}"/> : <c:out value="${playdate.date}"/> | Hosted By: <c:out value="${playdate.host.firstName}"/></td>
+	      <td class="d-flex justify-content-around">
+	      	 <c:choose>
+           		<c:when test="${playdate.host.id == user.id }">
+	               	<a class="btn btn-info" href="/playdates/${playdate.id}/edit">Edit</a> 
+	                   <form action="/playdates/${playdate.id}" method="post">
+	   					<input class="btn btn-danger" type="submit" value="Delete">
+					</form>
+                </c:when>
+			    <c:otherwise>
+                   	<c:set var="attending" value="${false}" />
+                   	<c:forEach items="${playdate.attendees}" var="attendee">
+                       	<c:if test="${attendee == user}">
+                           	<c:set var="attending" value="${true}" />
+                      	</c:if>
+                   	</c:forEach>
+                   	<c:choose>
+                    	<c:when test="${attending == false}">
+                        	<form action="/playdates/addUser/${playdate.id}" method="post">
+  								<input type="submit" value="Join">
+							</form>
+                    	</c:when>
+                    	<c:otherwise>
+							<form action="/playdates/removeUser/${playdate.id}" method="post">
+					  			<input type="submit" value="Cancel">
+							</form>
+                       	</c:otherwise>
+                  		</c:choose>
+                  </c:otherwise>
+               </c:choose>
+		      </td>
+	    	</tr>
+		</c:if>
+	</c:forEach>
+  </tbody>
 </table>
 <a class="text-info" href="/createPlaydates">Start a playdate!</a>
 </body>

@@ -24,6 +24,7 @@ import javax.validation.constraints.Size;
 import org.springframework.format.annotation.DateTimeFormat;
 
 
+
 @Entity
 @Table(name="users")
 public class User {
@@ -43,34 +44,77 @@ public class User {
 		 @Email(message="Email must be valid")
 		 private String email;
 		 
+		@NotNull
+		@Size(min=5, message="City must be greater than 3 characters.")
+		private String city;
+		
 		 @NotNull
 		 private String state;
 		 
+		 @NotNull
 		 @Size(min=5, message="Password must be greater than 5 characters")
 		 private String password;
 		 
 		 @Transient
 		 private String passwordConfirmation;
 		 
-		 @Column(updatable=false)
-		    @DateTimeFormat(pattern="yyyy-MM-dd")
-		    private Date createdAt;
-		    @DateTimeFormat(pattern="yyyy-MM-dd")
-		    private Date updatedAt;
+		@Column(updatable=false)
+		@DateTimeFormat(pattern="yyyy-MM-dd")
+		private Date createdAt;
+		@DateTimeFormat(pattern="yyyy-MM-dd")
+		private Date updatedAt;
 		    
+	    @OneToMany(mappedBy="host", fetch = FetchType.LAZY)
+	    private List<Playdate> playdates;
+		
+		@OneToMany(mappedBy="postedBy", fetch = FetchType.LAZY)
+	    private List<Comment> comments;
+		
+		@ManyToMany(fetch = FetchType.LAZY)
+	    @JoinTable(
+	        name = "playdates_users", 
+	        joinColumns = @JoinColumn(name = "playdate_id"), 
+	        inverseJoinColumns = @JoinColumn(name = "user_id")
+	    )
+	    private List<Playdate> playdatesAttending;
 		 
 		    public User() {
 		    	
 		    }
-		    public User(String firstName, String lastName, String email, String state, String password) {
+		    public User(String firstName, String lastName, String email, String city, String state, String password) {
 		    	this.firstName = firstName;
 		    	this.lastName = lastName;
 		    	this.email = email;
 		    	this.password = password;
+		    	this.city = city;
 		    	this.state = state;
 		    }
 			public Long getId() {
 				return id;
+			}
+			public String getCity() {
+				return city;
+			}
+			public void setCity(String city) {
+				this.city = city;
+			}
+			public List<Playdate> getPlaydates() {
+				return playdates;
+			}
+			public void setPlaydates(List<Playdate> playdates) {
+				this.playdates = playdates;
+			}
+			public List<Comment> getComments() {
+				return comments;
+			}
+			public void setComments(List<Comment> comments) {
+				this.comments = comments;
+			}
+			public List<Playdate> getPlaydatesAttending() {
+				return playdatesAttending;
+			}
+			public void setPlaydatesAttending(List<Playdate> playdatesAttending) {
+				this.playdatesAttending = playdatesAttending;
 			}
 			public void setId(Long id) {
 				this.id = id;

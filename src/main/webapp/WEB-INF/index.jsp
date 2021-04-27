@@ -41,6 +41,10 @@
             <form:input type="lastName" path="lastName"/>
         </p>
         <p>
+            <form:label path="city">City:</form:label>
+            <form:input type="text" path="city"/>
+        </p>
+        <p>
         <form:label path="state">State:</form:label>
           <form:select name="state" id="state" path="state">
 	<option value="AL">Alabama</option>
