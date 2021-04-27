@@ -8,14 +8,25 @@
 <meta charset="UTF-8">
 <link rel="stylesheet" href="/webjars/bootstrap/4.5.0/css/bootstrap.min.css" />
     <script src="/webjars/jquery/3.5.1/jquery.min.js"></script>
+    <style>
+    body{
+    background-image: url("IMG/dogwallpaper.jpeg");
+    }
+    </style>
     <script src="/webjars/bootstrap/4.5.0/js/bootstrap.min.js"></script>
+   <!--  <link rel="stylesheet"  -->
 <title>Dog Lover's</title>
 </head>
 <body>
-<h1 class="m-5 text-info">Please Sign up or login!</h1>
+<h1 class="m-5 text-dark align-center">Dogstagram!</h1>
+<h2 class="m-5 text-dark">Please Sign up or login!</h2>
 <div class="container center mt-5">
 <div class ="row">
-<div class="col border border-primary">
+
+<div class="col border border-dark">
+
+<!-- <img class="bg-img" src="/IMG/dogwallpaper.jpeg" alt="dogs"> -->
+
 <p class="text-success"><c:out value="${please}" /></p>
  <h1>Register!</h1>
   <p><form:errors path="user.*"/></p>
@@ -100,7 +111,7 @@
         <input class="btn btn-info mt-3" type="submit" value="Register!"/>
     </form:form>
     </div>
-    <div class ="col border border-primary">
+    <div class ="col border border-dark">
 <h1>Login</h1>
     <p><c:out value="${error}" /></p>
     <form method="post" action="/login">
@@ -117,5 +128,6 @@
     </div>
     </div>
 </div>
+
 </body>
 </html>

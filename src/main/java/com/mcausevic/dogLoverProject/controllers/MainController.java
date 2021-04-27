@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import com.mcausevic.dogLoverProject.models.Playdate;
 import com.mcausevic.dogLoverProject.models.User;
 import com.mcausevic.dogLoverProject.services.UserService;
 import com.mcausevic.dogLoverProject.validator.UserValidator;
@@ -66,5 +67,10 @@ public class MainController {
 		
 		
 		return "dashboard.jsp";
+	}
+	@RequestMapping("/playdates")
+	public String playdates(Model model) {
+		model.addAttribute("playdate", new Playdate());
+		return "playdates.jsp";
 	}
 }
