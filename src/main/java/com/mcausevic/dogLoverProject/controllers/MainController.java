@@ -14,15 +14,19 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+import static org.hamcrest.MatcherAssert.assertThat;  
+import static org.hamcrest.Matchers.*;
 
+import com.fasterxml.jackson.databind.DeserializationFeature;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.mcausevic.dogLoverProject.models.Comment;
 import com.mcausevic.dogLoverProject.models.Playdate;
 import com.mcausevic.dogLoverProject.models.User;
+import com.mcausevic.dogLoverProject.models.Weather;
 import com.mcausevic.dogLoverProject.services.CommentService;
 import com.mcausevic.dogLoverProject.services.PlaydateService;
 import com.mcausevic.dogLoverProject.services.UserService;
@@ -79,6 +83,11 @@ public class MainController {
 	}
 	@RequestMapping("/dashboard")
 	public String dashboard(Model model, HttpSession session, RedirectAttributes redirect) throws IOException {
+		if (session.getAttribute("weather") == null) {
+			session.setAttribute("weather", null);
+		}
+		Weather thisWeather = (Weather) session.getAttribute("weather");
+		model.addAttribute("weather", thisWeather);
 		Long userId = (Long)session.getAttribute("userId");
 		User user = userService.findUserById(userId);
 		if(userId == null) {
@@ -88,7 +97,7 @@ public class MainController {
 		OkHttpClient client = new OkHttpClient();
 		
 		    HttpUrl.Builder urlBuilder 
-		      = HttpUrl.parse("http://api.openweathermap.org/data/2.5/weather/?" + "/ex/bars").newBuilder();
+		      = HttpUrl.parse("http://api.openweathermap.org/data/2.5/weather?").newBuilder();
 		    urlBuilder.addQueryParameter("q", user.getCity());
 		    urlBuilder.addQueryParameter("units", "imperial");
 		    urlBuilder.addQueryParameter("appid", "0c03e69d11eeb6257ebea29c1471329d");
@@ -99,12 +108,19 @@ public class MainController {
 		      .build();
 		    Call call = client.newCall(request);
 		    Response response = call.execute();
-		    System.out.println(response.body().string());
+		    assertThat(response.code(), equalTo(200));
+		    String weatherInfo = response.body().string();
+		ObjectMapper mapper = new ObjectMapper();
+		mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
 		
+		Weather weather = mapper.readValue(weatherInfo, Weather.class);
+		response.close();
+		System.out.println(weatherInfo);
+		
+		session.setAttribute("weather", weather);
 		model.addAttribute("user", userService.findUserById(userId));
 		model.addAttribute("allPlaydates", playdateService.allPlaydates());
 		model.addAttribute("allComments", commentService.allComments());
-//		model.addAttribute("", );
 		return "dashboard.jsp";
 	}
 	

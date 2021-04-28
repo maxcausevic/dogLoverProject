@@ -15,6 +15,7 @@
     }
     </style>
     <script src="/webjars/bootstrap/4.5.0/js/bootstrap.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js%22%3E"></script>
 <title>Dashboard</title>
 </head>
 <body>
@@ -64,15 +65,38 @@
 					<div class="form-group mt-5">
 						<input type=hidden value="${user.city}"/>
 						<label class="text-warning" for="weather">Today's Weather</label>
-						<textarea class="form-control" id="weather" name="weather"
-							rows="3">
-							<c:out value="${weather.description}"/>
-						</textarea>
-					</div>
+						<div class="bg-white p-3 border-rounded">
+							<p>Temp: ${weather.main.temp} </p>
+							<p>Feels Like: ${weather.main.feels_like} </p>
+							<p>Today's High: ${weather.main.temp_max} </p>
+							<p>Today's Low: ${weather.main.temp_min} </p>
+						</div>
+						<div>
+							<!-- <div id="weatherDisplay"> -->
+								<p id="description"></p>
+							<!-- </div> -->
+						</div>
+					 </div> 
 					<a class="text-info" href="/playdates">Check out some doggie playdates!</a>
 </div>
 </div>
 </div>
-
+<script>
+var display = document.getElementById("weatherDisplay");
+const settings = {
+		"async": true,
+		"crossDomain": true,
+		"url": "https://community-open-weather-map.p.rapidapi.com/weather?q=London%2Cuk&lat=0&lon=0&callback=test&id=2172797&lang=null&units=%22metric%22%20or%20%22imperial%22&mode=xml%2C%20html",
+		"method": "GET",
+		"headers": {
+			"x-rapidapi-key": "f19d52f39bmsh0620644bfd0ef7bp15579bjsnf9f0c761d2e7",
+			"x-rapidapi-host": "community-open-weather-map.p.rapidapi.com"
+		} 
+	};
+	$.ajax(settings).done(function (response) {
+		console.log(jQuery.parseJSON(response));
+	$("#description").text(response.base); 
+	});
+</script>
 </body>
 </html>
