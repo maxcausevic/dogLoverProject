@@ -1,5 +1,7 @@
 package com.mcausevic.dogLoverProject.controllers;
 
+
+import java.io.IOException;
 import java.util.List;
 
 import javax.servlet.http.HttpSession;
@@ -25,6 +27,12 @@ import com.mcausevic.dogLoverProject.services.CommentService;
 import com.mcausevic.dogLoverProject.services.PlaydateService;
 import com.mcausevic.dogLoverProject.services.UserService;
 import com.mcausevic.dogLoverProject.validator.UserValidator;
+
+import okhttp3.Call;
+import okhttp3.HttpUrl;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.Response;
 
 
 @Controller
@@ -70,17 +78,58 @@ public class MainController {
 		}
 	}
 	@RequestMapping("/dashboard")
-	public String dashboard(Model model, HttpSession session, RedirectAttributes redirect) {
+	public String dashboard(Model model, HttpSession session, RedirectAttributes redirect) throws IOException {
 		Long userId = (Long)session.getAttribute("userId");
+		User user = userService.findUserById(userId);
 		if(userId == null) {
 			redirect.addFlashAttribute("please", "Please register or login!");
 			return "redirect:/";
 		}
+		OkHttpClient client = new OkHttpClient();
+		
+		    HttpUrl.Builder urlBuilder 
+		      = HttpUrl.parse("http://api.openweathermap.org/data/2.5/weather/?" + "/ex/bars").newBuilder();
+		    urlBuilder.addQueryParameter("q", user.getCity());
+		    urlBuilder.addQueryParameter("units", "imperial");
+		    urlBuilder.addQueryParameter("appid", "0c03e69d11eeb6257ebea29c1471329d");
+		    String url = urlBuilder.build().toString();
+
+		    Request request = new Request.Builder()
+		      .url(url)
+		      .build();
+		    Call call = client.newCall(request);
+		    Response response = call.execute();
+		    System.out.println(response.body().string());
+		
 		model.addAttribute("user", userService.findUserById(userId));
 		model.addAttribute("allPlaydates", playdateService.allPlaydates());
 		model.addAttribute("allComments", commentService.allComments());
+//		model.addAttribute("", );
 		return "dashboard.jsp";
 	}
+	
+//	@RequestMapping("/testing")
+//	public String weather(Model model) throws IOException {
+//		OkHttpClient client = new OkHttpClient();
+//		
+//		    HttpUrl.Builder urlBuilder 
+//		      = HttpUrl.parse("http://api.openweathermap.org/data/2.5/weather/?" + "/ex/bars").newBuilder();
+//		    urlBuilder.addQueryParameter("q", "tulsa");
+//		    urlBuilder.addQueryParameter("units", "imperial");
+//		    urlBuilder.addQueryParameter("appid", "0c03e69d11eeb6257ebea29c1471329d");
+//		    
+//		    String url = urlBuilder.build().toString();
+//
+//		    Request request = new Request.Builder()
+//		      .url(url)
+//		      .build();
+//		    Call call = client.newCall(request);
+//		    Response response = call.execute();
+//		    System.out.println(response.body().string());
+//		    assertThat(response.code(), equals(200));
+//		
+//		return "redirect:/dashboard";
+//	}
 	
 	@PostMapping("/createMessage")
 	public String createComment(@RequestParam("content") String content, HttpSession session) {

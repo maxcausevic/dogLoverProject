@@ -62,9 +62,12 @@
 <div class="col-5 ml-4 border border-dark">
 
 					<div class="form-group mt-5">
-						<label class="text-warning" for="messages">Today's Weather</label>
+						<input type=hidden value="${user.city}"/>
+						<label class="text-warning" for="weather">Today's Weather</label>
 						<textarea class="form-control" id="weather" name="weather"
-							rows="3"></textarea>
+							rows="3">
+							<c:out value="${weather.description}"/>
+						</textarea>
 					</div>
 					<a class="text-info" href="/playdates">Check out some doggie playdates!</a>
 </div>
