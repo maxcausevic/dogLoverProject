@@ -18,8 +18,10 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import com.mcausevic.dogLoverProject.models.Comment;
 import com.mcausevic.dogLoverProject.models.Playdate;
 import com.mcausevic.dogLoverProject.models.User;
+import com.mcausevic.dogLoverProject.services.CommentService;
 import com.mcausevic.dogLoverProject.services.PlaydateService;
 import com.mcausevic.dogLoverProject.services.UserService;
 import com.mcausevic.dogLoverProject.validator.UserValidator;
@@ -30,10 +32,12 @@ public class MainController {
 	private final UserService userService;
 	private final UserValidator userValidator;
 	private final PlaydateService playdateService;
-	public MainController(UserService userService, UserValidator userValidator, PlaydateService playdateService) {
+	private final CommentService commentService;
+	public MainController(UserService userService, UserValidator userValidator, PlaydateService playdateService, CommentService commentService) {
 		this.userService = userService;
 		this.userValidator = userValidator;
 		this.playdateService = playdateService;
+		this.commentService = commentService;
 	}
 	@RequestMapping("/")
 	public String index(Model model) {
@@ -74,8 +78,20 @@ public class MainController {
 		}
 		model.addAttribute("user", userService.findUserById(userId));
 		model.addAttribute("allPlaydates", playdateService.allPlaydates());
-		
+		model.addAttribute("allComments", commentService.allComments());
 		return "dashboard.jsp";
+	}
+	
+	@PostMapping("/createMessage")
+	public String createComment(@RequestParam("content") String content, HttpSession session) {
+		Comment comment = new Comment();
+		User user = userService.findUserById((Long) session.getAttribute("userId"));
+		comment.setContent(content);
+		comment.setPostedBy(user);
+		Comment newComment = commentService.createComment(comment);
+		List <Comment> allComments = commentService.allComments();
+		allComments.add(newComment);
+		return "redirect:/dashboard";
 	}
 	
 //***************************************

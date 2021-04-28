@@ -41,29 +41,24 @@
 				<h2 class="m-5 text-info">Message Wall</h2>
 				<p></p>
 				<div class="form-group">
-					<%-- <c:forEach var="message" items="${event.messages}"> --%>
 						<label for="comments">Comments</label>
 						<textarea class="form-control" id="comments" rows="3">
-					<%-- ${message.content} --%>
+										<c:forEach items="${allComments}" var="comment">
+<c:out value="${comment.postedBy.firstName}"/> <c:out value="${comment.postedBy.lastName}"/>: <c:out value="${comment.content}"/>
+********************
+					</c:forEach>
 					</textarea>
-					<%-- </c:forEach> --%>
 				</div>
 				<form:errors path="comment.*" />
-
-				<%-- <form class="form-group push" method="POST"
-					action="/createMessage/${event.id}"> --%>
-
-
+				<form class="form-group push" method="POST" action="/createMessage" modelAttribute="message">
+					<input type=hidden value="${userId}"/>
 					<div class="form-group">
 						<label for="messages">Messages</label>
-						<textarea class="form-control" id="content" name="content"
-							rows="3"></textarea>
+						<textarea class="form-control" id="content" name="content" rows="3"></textarea>
 					</div>
-
-					<input class="btn btn-success mt-3 mb-3" type="submit"
-						value="Add comment!" />
+					<input class="btn btn-success mt-3 mb-3" type="submit" value="Add comment!" />
 				</form>
-				</div>
+</div>
 <div class="col-5 ml-4 border border-dark">
 
 					<div class="form-group mt-5">
