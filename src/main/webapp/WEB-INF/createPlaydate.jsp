@@ -36,19 +36,27 @@
 </nav>
 
 	<h3 class="m-5">Create Event</h3>
-		<%-- <p>
+		 <p>
 			<form:errors path="playdate.*" />
-		</p> --%>
+		</p>
 
-		<%-- <form:form class="form-group push" method="POST" action="/createPlayDate"
-			modelAttribute="playdate"> --%>
-			<%-- <p>
+		 <form:form class="form-group push" method="POST" action="/createPlaydate"
+			modelAttribute="playdate"> 
+			<form:hidden  value="${userId}" path="host"/>
+			 <p>
 				<form:label path="name">Name:</form:label>
-				<form:input type="name" path="name" />
+				<form:input type="text" path="name" />
 			</p>
 			<p>
-				<form:label path="location">Location:</form:label>
-				<form:input type="location" path="location" />
+				<form:label path="date">Date:</form:label>
+				<form:input type="date" path="date" />
+			</p>
+			<p>
+				<form:label path="city">City:</form:label>
+				<form:input type="text" path="city" />
+			</p>
+			<p>
+				<form:label path="state">State:</form:label>
 				<form:select name="state" id="state" path="state">
 					<option value="AL">Alabama</option>
 					<option value="AK">Alaska</option>
@@ -103,16 +111,9 @@
 					<option value="WY">Wyoming</option>
 				</form:select>
 			</p>
-			<p>
-				<form:label path="playdateDate">Date:</form:label>
-				<form:input type="date" path="playdateDate" />
-			</p>
-
-
 			<input class="btn btn-success mt-3" type="submit"
-				value="Start Playdate!" />
-			<a class="btn btn-primary float-right" href="/logout">Logout</a> --%>
-		<%-- </form:form> --%>
+				value="Create Playdate!" />
+		 </form:form> <%-- 
 		
 		<form class="m-5 col-3 border border-solid border-dark" action="/createPlaydates">
   <label for="name">name:</label><br>
@@ -120,7 +121,7 @@
   <label for="location">location:</label><br>
   <input type="text" id="location" name="location" value="location"><br><br>
   <input type="submit" value="Submit">
-</form> 
+</form>  --%>
 	
 </body>
 </html>

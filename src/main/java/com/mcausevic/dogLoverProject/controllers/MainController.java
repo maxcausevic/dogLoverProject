@@ -167,7 +167,15 @@ public class MainController {
 	@RequestMapping("/playdates")
 	public String playdates(Model model) {
 		model.addAttribute("playdate", new Playdate());
+		model.addAttribute("allPlaydates", playdateService.allPlaydates());
 		return "playdates.jsp";
+	}
+	
+	@RequestMapping("/createPlaydate")
+	public String createPlaydates(@Valid @ModelAttribute("playdate") Playdate playdate, BindingResult result, Model model, HttpSession session) {
+		User user = userService.findUserById((Long) session.getAttribute("userId"));
+		model.addAttribute("playdate", new Playdate());
+		return "createPlaydate.jsp";
 	}
 	
 	@PostMapping("/createPlaydate")
@@ -180,29 +188,55 @@ public class MainController {
 		}
 	}
 	
+	// DELETE IDEA METHOD
+    @RequestMapping(value="/delete/{id}", method=RequestMethod.DELETE)
+    public String deleteOnePlaydate(@PathVariable ("id") Long playdate_id) {
+        playdateService.deletePlaydate(playdate_id);
+        return "redirect:/playdates";
+    }
+	
 //***************************************
 //	Join/Cancel Playdate
 //***************************************
+    
+ // LIKE AN IDEA METHOD
+    @RequestMapping("/playdates/addUser/{id}")
+    public String joinPlaydate(HttpSession session, @PathVariable ("id") Long id) {
+        Long userId = (Long) session.getAttribute("userId");
+        User u = userService.findUserById(userId);
+        Playdate playdate =  playdateService.findPlaydate(id);
+        List<User> attendees = playdate.getAttendees();
+        attendees.add(u);
+        playdate.setAttendees(attendees);
+        playdateService.updatePlaydate(playdate);
+            return "redirect:/playdates";
+    }
+   
+//    @RequestMapping("/playdates/removeUser/{id}")
+//    public String cancelPlaydate(HttpSession session, @PathVariable ("id") Long id) {
+//    
+//    	return "redirect:/playdates";
+//    }
 
-	@PostMapping("/playdates/addUser/{playdate_id}")
-	 public String addUser(@PathVariable("playdate_id") Long playdate_id, HttpSession session) {
-		Playdate playdate = playdateService.findPlaydate(playdate_id);
-		User user = userService.findUserById((Long) session.getAttribute("userId"));
-		List <User> uInPlaydates = playdate.getAttendees();
-		uInPlaydates.add(user);
-		playdateService.updatePlaydate(playdate);
-		return "redirect:/playdates";
-	}
+//	@PostMapping("/playdates/addUser/{playdate_id}")
+//	 public String addUser(@PathVariable("playdate_id") Long playdate_id, HttpSession session) {
+//		Playdate playdate = playdateService.findPlaydate(playdate_id);
+//		User user = userService.findUserById((Long) session.getAttribute("userId"));
+//		List <User> uInPlaydates = playdate.getAttendees();
+//		uInPlaydates.add(user);
+//		playdateService.updatePlaydate(playdate);
+//		return "redirect:/playdates";
+//	}
 	
-	@PostMapping("/playdates/removeUser/{playdate_id}") 
-		public String removeUser(@PathVariable("playdate_id") Long playdate_id, HttpSession session) {
-		Playdate playdate = playdateService.findPlaydate(playdate_id);
-		User user = userService.findUserById((Long) session.getAttribute("userId"));
-		List <User> uInPlaydates = playdate.getAttendees();
-		uInPlaydates.remove(user);
-		playdateService.updatePlaydate(playdate);
-		return "redirect:/playdates";
-	}
+//	@PostMapping("/playdates/removeUser/{playdate_id}") 
+//		public String removeUser(@PathVariable("playdate_id") Long playdate_id, HttpSession session) {
+//		Playdate playdate = playdateService.findPlaydate(playdate_id);
+//		User user = userService.findUserById((Long) session.getAttribute("userId"));
+//		List <User> uInPlaydates = playdate.getAttendees();
+//		uInPlaydates.remove(user);
+//		playdateService.updatePlaydate(playdate);
+//		return "redirect:/playdates";
+//	}
 
 	
 //***************************************

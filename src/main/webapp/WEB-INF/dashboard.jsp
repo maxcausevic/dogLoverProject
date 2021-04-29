@@ -83,8 +83,7 @@ body {
 					</div>
 					<div>
 						<iframe width="450" height="250" frameborder="0" style="border: 0"
-							src="https://www.google.com/maps/embed/v1/place?key=AIzaSyDGtrThqM03f8tvvX4R_xJ99bkmlZZWaYw&PARAMETERS"
-							allowfullscreen> </iframe>
+							src="https://www.google.com/maps/embed/v1/place?key=AIzaSyDGtrThqM03f8tvvX4R_xJ99bkmlZZWaYw&q=dogpark+${user.city}"> </iframe>
 					</div>
 				</div>
 				<a class="text-info" href="/playdates">Check out some doggie
