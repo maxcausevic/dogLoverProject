@@ -81,17 +81,18 @@ body {
 						<p>Today's High: ${weather.main.temp_max}</p>
 						<p>Today's Low: ${weather.main.temp_min}</p>
 					</div>
+					<br>
 					<div>
 						<iframe width="450" height="250" frameborder="0" style="border: 0"
 							src="https://www.google.com/maps/embed/v1/place?key=AIzaSyDGtrThqM03f8tvvX4R_xJ99bkmlZZWaYw&q=dogpark+${user.city}"> </iframe>
 					</div>
 				</div>
-				<a class="text-info" href="/playdates">Check out some doggie
-					playdates!</a>
+				<h3> <a class="text-info" href="/playdates">Check out some doggie
+					playdates!</a> </h3>
 			</div>
 		</div>
 	</div>
-	<script>
+<!-- 	<script>
 		var display = document.getElementById("weatherDisplay");
 		const settings = {
 			"async" : true,
@@ -107,6 +108,6 @@ body {
 			console.log(jQuery.parseJSON(response));
 			$("#description").text(response.base);
 		});
-	</script>
+	</script> -->
 </body>
 </html>

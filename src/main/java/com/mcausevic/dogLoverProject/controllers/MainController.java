@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -165,9 +166,10 @@ public class MainController {
 //***************************************
 	
 	@RequestMapping("/playdates")
-	public String playdates(Model model) {
+	public String playdates(Model model, HttpSession session) {
 		model.addAttribute("playdate", new Playdate());
 		model.addAttribute("allPlaydates", playdateService.allPlaydates());
+		model.addAttribute("user", userService.findUserById((Long)session.getAttribute("userId")));
 		return "playdates.jsp";
 	}
 	
@@ -199,7 +201,6 @@ public class MainController {
 //	Join/Cancel Playdate
 //***************************************
     
- // LIKE AN IDEA METHOD
     @RequestMapping("/playdates/addUser/{id}")
     public String joinPlaydate(HttpSession session, @PathVariable ("id") Long id) {
         Long userId = (Long) session.getAttribute("userId");
@@ -211,33 +212,47 @@ public class MainController {
         playdateService.updatePlaydate(playdate);
             return "redirect:/playdates";
     }
+    
+    @RequestMapping("/playdates/removeUser/{id}")
+    public String cancelPlaydate(HttpSession session, @PathVariable ("id") Long id) {
+        Long userId = (Long) session.getAttribute("userId");
+        User u = userService.findUserById(userId);
+        Playdate playdate =  playdateService.findPlaydate(id);
+        List<User> attendees = playdate.getAttendees();
+        for(int i=0; i<attendees.size(); i++) {
+            if(attendees.get(i).getId()== u.getId()){
+                attendees.remove(i);
+            }
+        }
+            playdate.setAttendees(attendees);
+            playdateService.updatePlaydate(playdate);
+                return "redirect:/playdates";
+        }
    
-//    @RequestMapping("/playdates/removeUser/{id}")
-//    public String cancelPlaydate(HttpSession session, @PathVariable ("id") Long id) {
-//    
-//    	return "redirect:/playdates";
-//    }
-
-//	@PostMapping("/playdates/addUser/{playdate_id}")
-//	 public String addUser(@PathVariable("playdate_id") Long playdate_id, HttpSession session) {
-//		Playdate playdate = playdateService.findPlaydate(playdate_id);
-//		User user = userService.findUserById((Long) session.getAttribute("userId"));
-//		List <User> uInPlaydates = playdate.getAttendees();
-//		uInPlaydates.add(user);
-//		playdateService.updatePlaydate(playdate);
-//		return "redirect:/playdates";
-//	}
-	
-//	@PostMapping("/playdates/removeUser/{playdate_id}") 
-//		public String removeUser(@PathVariable("playdate_id") Long playdate_id, HttpSession session) {
-//		Playdate playdate = playdateService.findPlaydate(playdate_id);
-//		User user = userService.findUserById((Long) session.getAttribute("userId"));
-//		List <User> uInPlaydates = playdate.getAttendees();
-//		uInPlaydates.remove(user);
-//		playdateService.updatePlaydate(playdate);
-//		return "redirect:/playdates";
-//	}
-
+//***************************************
+//	Edit Playdate
+//***************************************
+        
+    @RequestMapping("/playdates/{id}/edit") 
+    public String editPlaydate(@PathVariable ("id") Long id, Model model, HttpSession session, RedirectAttributes redirectAttr) {
+        Long userId = (Long) session.getAttribute("userId");
+        if(userId == null) {
+            redirectAttr.addFlashAttribute("please", "You MUST Register or Login before entering our site!");
+            return "redirect:/";
+        }
+        model.addAttribute("playdate", playdateService.findPlaydate(id));
+        return "edit.jsp";
+    }
+    
+    @RequestMapping(value="/playdates/edit/{id}", method=RequestMethod.PUT)
+    public String updatePlaydate(@Valid @ModelAttribute("playdate") Playdate playdate, BindingResult result) {
+        if(result.hasErrors()) {
+            return "edit.jsp";
+        }else {
+            playdateService.updatePlaydate(playdate);
+            return "redirect:/playdates";
+        }
+    }
 	
 //***************************************
 //	Logout

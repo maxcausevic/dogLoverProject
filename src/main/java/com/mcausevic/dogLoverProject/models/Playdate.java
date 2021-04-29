@@ -64,7 +64,7 @@ public class Playdate {
     @JoinTable(
         name = "playdates_users", 
         joinColumns = @JoinColumn(name = "user_id"), 
-        inverseJoinColumns = @JoinColumn(name = "playdates_id")
+        inverseJoinColumns = @JoinColumn(name = "playdate_id")
     )
     private List<User> attendees;
 	

@@ -27,7 +27,7 @@
     <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
       <div class="navbar-nav">
         <a class="nav-link active" aria-current="page" href="/dashboard">Home</a>
-        <a class="nav-link" href="/mydog">My Dog's Profile</a>
+        <a class="nav-link" href="/mydog/${userId}">My Dog's Profile</a>
         <a class="nav-link" href="/logout">Logout</a>
        
       </div>

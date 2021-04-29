@@ -30,7 +30,7 @@ body {
 			<div class="collapse navbar-collapse" id="navbarNavAltMarkup">
 				<div class="navbar-nav">
 					<a class="nav-link active" aria-current="page" href="/dashboard">Home</a>
-					<a class="nav-link" href="/mydog">My Dog's Profile</a> <a
+					<a class="nav-link" href="/mydog/${userId}">My Dog's Profile</a> <a
 						class="nav-link" href="/logout">Logout</a>
 
 				</div>
@@ -48,6 +48,9 @@ body {
 
 			<tr>
 				<th scope="col">Playdate</th>
+				<th scope="col">Number of Attendees</th>
+				<th scope="col">Date</th>
+				<th scope="col">Host</th>
 				<th scope="col">Action</th>
 			</tr>
 		</thead>
@@ -55,10 +58,10 @@ body {
 			<c:forEach items="${allPlaydates}" var="playdate">
 				<%-- <c:if test="${user.city == playdate.city }"> --%>
 				<tr>
-					<th scope="row">1</th>
-					<td><c:out value="${playdate.name}" /> : <c:out
-							value="${playdate.date}" /> | Hosted By: <c:out
-							value="${playdate.host.firstName}" /></td>
+					<th scope="row"><c:out value="${playdate.name}" /></th>
+					<td><c:out value="${playdate.attendees.size()}" /> </td>
+					<td><c:out value="${playdate.date}" /> </td>
+					<td><c:out value="${playdate.host.firstName}" /></td>
 					<td class="d-flex justify-content-around"><c:choose>
 							<c:when test="${playdate.host.id == userId }">
 								<a class="btn btn-info" href="/playdates/${playdate.id}/edit">Edit</a>
@@ -74,19 +77,17 @@ body {
 										<c:set var="attending" value="${true}" />
 									</c:if>
 								</c:forEach>
-								<c:choose>
-									<c:when test="${attending == false}">
+									<c:if test="${!playdate.attendees.contains(user)}">
 										<form action="/playdates/addUser/${playdate.id}" method="post">
 											<input type="submit" value="Join">
 										</form>
-									</c:when>
-									<c:otherwise>
+									</c:if>
+									<c:if test="${playdate.attendees.contains(user)}">
 										<form action="/playdates/removeUser/${playdate.id}"
 											method="post">
 											<input type="submit" value="Cancel">
 										</form>
-									</c:otherwise>
-								</c:choose>
+									</c:if>
 							</c:otherwise>
 						</c:choose></td>
 				</tr>
