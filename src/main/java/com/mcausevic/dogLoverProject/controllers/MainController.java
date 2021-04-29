@@ -1,6 +1,9 @@
 package com.mcausevic.dogLoverProject.controllers;
 
 
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.equalTo;
+
 import java.io.IOException;
 import java.util.List;
 
@@ -18,8 +21,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
-import static org.hamcrest.MatcherAssert.assertThat;  
-import static org.hamcrest.Matchers.*;
 
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -211,6 +212,19 @@ public class MainController {
 	@GetMapping("/logout")
 	public String logout(HttpSession session) {
 		session.invalidate();
-		return "redirect:/login";
+		return "redirect:/";
 	}
+	
+	@RequestMapping("/mydog/{id}")
+	public String viewDog(@PathVariable("id") Long id, Model model, HttpSession session) {
+		User user = userService.findUserById((Long) session.getAttribute("userId"));
+		model.addAttribute("user", user);
+		
+		return "profile.jsp";
+	}
+	
+	
+	
+	
+	
 }

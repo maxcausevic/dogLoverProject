@@ -1,5 +1,6 @@
 package com.mcausevic.dogLoverProject.models;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -54,6 +55,9 @@ public class User {
 		 @NotNull
 		 @Size(min=5, message="Password must be greater than 5 characters")
 		 private String password;
+		 
+		 @Column(nullable=true, length=64)
+		 private ArrayList<String> pictures;
 		 
 		 @Transient
 		 private String passwordConfirmation;
@@ -178,6 +182,14 @@ public class User {
 			    protected void onUpdate(){
 			        this.updatedAt = new Date();
 			    }
+				public ArrayList<String> getPictures() {
+					return pictures;
+				}
+				public void setPictures(ArrayList<String> pictures) {
+					this.pictures = pictures;
+				}
+		
+			    
 	}
 
 
