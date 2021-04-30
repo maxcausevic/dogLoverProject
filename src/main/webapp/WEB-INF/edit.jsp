@@ -56,7 +56,12 @@ body {
 				<div class="col">
 
 					<img class='rounded-circle' style="height: 250px; width: 250px;"
-						src="/IMG/dog3.jpg"><br>
+						src="/IMG/dog12.png"><br>
+				</div>
+				<div class="col">
+
+					<img class='rounded-circle' style="height: 250px; width: 250px;"
+						src="/IMG/dog13.jpg"><br>
 				</div>
 			</div>
 
