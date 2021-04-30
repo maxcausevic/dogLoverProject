@@ -1,49 +1,55 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
-    pageEncoding="UTF-8"%>
+	pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
+<%@ page isErrorPage="true" %> 
+
 
 <!DOCTYPE html>
 <html>
 <head>
 <meta charset="UTF-8">
-<link rel="stylesheet" href="/webjars/bootstrap/4.5.0/css/bootstrap.min.css" />
-    <script src="/webjars/jquery/3.5.1/jquery.min.js"></script>
-    <style>
-    body{
-    background-image: url("IMG/dogsplaying.jpeg");
-    }
-    </style>
-    <script src="/webjars/bootstrap/4.5.0/js/bootstrap.min.js"></script>
+<link rel="stylesheet"
+	href="/webjars/bootstrap/4.5.0/css/bootstrap.min.css" />
+<script src="/webjars/jquery/3.5.1/jquery.min.js"></script>
+<style>
+body {
+	background-image: url("IMG/dogsplaying.jpeg");
+}
+</style>
+<script src="/webjars/bootstrap/4.5.0/js/bootstrap.min.js"></script>
 <title>Create a playdate</title>
 </head>
 <body>
-<nav class="navbar navbar-expand-lg navbar-light bg-light">
-  <div class="container-fluid">
-    <a class="navbar-brand" href="#">Dogstagram</a>
-    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
-      <span class="navbar-toggler-icon"></span>
-    </button>
-    <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
-      <div class="navbar-nav">
-        <a class="nav-link active" aria-current="page" href="/dashboard">Home</a>
-        <a class="nav-link" href="/mydog/${userId}">My Dog's Profile</a>
-        <a class="nav-link" href="/logout">Logout</a>
-       
-      </div>
-    </div>
-  </div>
-</nav>
+	<nav class="navbar navbar-expand-lg navbar-light bg-light">
+		<div class="container-fluid">
+			<a class="navbar-brand" href="#">Dogstagram</a>
+			<button class="navbar-toggler" type="button"
+				data-bs-toggle="collapse" data-bs-target="#navbarNavAltMarkup"
+				aria-controls="navbarNavAltMarkup" aria-expanded="false"
+				aria-label="Toggle navigation">
+				<span class="navbar-toggler-icon"></span>
+			</button>
+			<div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+				<div class="navbar-nav">
+					<a class="nav-link active" aria-current="page" href="/dashboard">Home</a>
+					<a class="nav-link" href="/mydog/${userId}">My Dog's Profile</a> <a
+						class="nav-link" href="/logout">Logout</a>
 
-	<h3 class="m-5">Create Event</h3>
-		 <p>
+				</div>
+			</div>
+		</div>
+	</nav>
+	<div class="container">
+		<h3 class="m-5">Create Event</h3>
+		<p>
 			<form:errors path="playdate.*" />
 		</p>
 
-		 <form:form class="form-group push" method="POST" action="/createPlaydate"
-			modelAttribute="playdate"> 
-			<form:hidden  value="${userId}" path="host"/>
-			 <p>
+		<form:form class="form-group push" method="POST"
+			action="/createPlaydate" modelAttribute="playdate">
+			<form:hidden value="${userId}" path="host" />
+			<p>
 				<form:label path="name">Name:</form:label>
 				<form:input type="text" path="name" />
 			</p>
@@ -113,7 +119,8 @@
 			</p>
 			<input class="btn btn-success mt-3" type="submit"
 				value="Create Playdate!" />
-		 </form:form> <%-- 
+		</form:form>
+		<%-- 
 		
 		<form class="m-5 col-3 border border-solid border-dark" action="/createPlaydates">
   <label for="name">name:</label><br>
@@ -122,6 +129,6 @@
   <input type="text" id="location" name="location" value="location"><br><br>
   <input type="submit" value="Submit">
 </form>  --%>
-	
+	</div>
 </body>
 </html>

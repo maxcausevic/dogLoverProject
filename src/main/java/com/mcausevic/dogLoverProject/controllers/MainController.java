@@ -183,7 +183,7 @@ public class MainController {
 	@PostMapping("/createPlaydate")
 	public String createPlaydate(@Valid @ModelAttribute("playdate") Playdate playdate, BindingResult result) {
 		if (result.hasErrors()) {
-			return "createPlaydates.jsp";
+			return "createPlaydate.jsp";
 		} else {
 			playdateService.createPlaydate(playdate);
 			return "redirect:/playdates";

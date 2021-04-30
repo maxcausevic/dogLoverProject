@@ -2,6 +2,7 @@
 	pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
+<%@ page isErrorPage="true" %> 
 
 <!DOCTYPE html>
 <html>
@@ -40,6 +41,24 @@ body {
 			</div>
 		</div>
 	</nav>
+	<div class="container">
+			<div class="row">
+				<div class="col">
+
+					<img class='rounded-circle' style="height: 250px; width: 250px;"
+						src="/IMG/dog10.jpg"><br>
+				</div>
+				<div class="col">
+
+					<img class='rounded-circle' style="height: 250px; width: 250px;"
+						src="/IMG/dog11.jpg"><br>
+				</div>
+				<div class="col">
+
+					<img class='rounded-circle' style="height: 250px; width: 250px;"
+						src="/IMG/dog3.jpg"><br>
+				</div>
+			</div>
 
 	<h3 class="m-5">Edit Playdate</h3>
 	<p>

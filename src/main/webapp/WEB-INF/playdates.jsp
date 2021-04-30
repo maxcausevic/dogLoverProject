@@ -2,6 +2,7 @@
 	pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
+<%@ page isErrorPage="true" %> 
 <!DOCTYPE html>
 <html>
 <head>
@@ -37,46 +38,47 @@ body {
 			</div>
 		</div>
 	</nav>
-	<h1 class="mt-3">
-		Welcome,
-		<c:out value="${user.firstName}" />
-	</h1>
-	<h3 class="m-5 text-info">Playdates in your area</h3>
-	<table class="table-success col-5 m-5 table-hover">
+	<div class="container">
+		<h1 class="mt-3">
+			Welcome,
+			<c:out value="${user.firstName}" />
+		</h1>
+		<h3 class="m-5 text-info">Playdates in your area</h3>
+		<table class="table-secondary col-10 m-5 table-hover table-bordered">
 
-		<thead>
+			<thead>
 
-			<tr>
-				<th scope="col">Playdate</th>
-				<th scope="col">Number of Attendees</th>
-				<th scope="col">Date</th>
-				<th scope="col">Host</th>
-				<th scope="col">Action</th>
-			</tr>
-		</thead>
-		<tbody>
-			<c:forEach items="${allPlaydates}" var="playdate">
-				<%-- <c:if test="${user.city == playdate.city }"> --%>
 				<tr>
-					<th scope="row"><c:out value="${playdate.name}" /></th>
-					<td><c:out value="${playdate.attendees.size()}" /> </td>
-					<td><c:out value="${playdate.date}" /> </td>
-					<td><c:out value="${playdate.host.firstName}" /></td>
-					<td class="d-flex justify-content-around"><c:choose>
-							<c:when test="${playdate.host.id == userId }">
-								<a class="btn btn-info" href="/playdates/${playdate.id}/edit">Edit</a>
-								<form action="/delete/${playdate.id}" method="post">
-									<input type="hidden" name="_method" value="delete"> <input
-										class="btn btn-danger" type="submit" value="Delete">
-								</form>
-							</c:when>
-							<c:otherwise>
-								<c:set var="attending" value="${false}" />
-								<c:forEach items="${playdate.attendees}" var="attendee">
-									<c:if test="${attendee == user}">
-										<c:set var="attending" value="${true}" />
-									</c:if>
-								</c:forEach>
+					<th class="text-center" scope="col">Playdate</th>
+					<th class="text-center" scope="col">Number of Attendees</th>
+					<th class="text-center" scope="col">Date</th>
+					<th class="text-center" scope="col">Host</th>
+					<th class="text-center" scope="col">Action</th>
+				</tr>
+			</thead>
+			<tbody>
+				<c:forEach items="${allPlaydates}" var="playdate">
+					<%-- <c:if test="${user.city == playdate.city }"> --%>
+					<tr>
+						<th class="text-center" scope="row"><c:out value="${playdate.name}" /></th>
+						<td class="text-center"><c:out value="${playdate.attendees.size()}" /></td>
+						<td class="text-center"><c:out value="${playdate.date}" /></td>
+						<td class="text-center"><c:out value="${playdate.host.firstName}" /></td>
+						<td class="d-flex justify-content-around"><c:choose>
+								<c:when test="${playdate.host.id == userId }">
+									<a class="btn btn-info" href="/playdates/${playdate.id}/edit">Edit</a>
+									<form action="/delete/${playdate.id}" method="post">
+										<input type="hidden" name="_method" value="delete"> <input
+											class="btn btn-danger" type="submit" value="Delete">
+									</form>
+								</c:when>
+								<c:otherwise>
+									<c:set var="attending" value="${false}" />
+									<c:forEach items="${playdate.attendees}" var="attendee">
+										<c:if test="${attendee == user}">
+											<c:set var="attending" value="${true}" />
+										</c:if>
+									</c:forEach>
 									<c:if test="${!playdate.attendees.contains(user)}">
 										<form action="/playdates/addUser/${playdate.id}" method="post">
 											<input type="submit" value="Join">
@@ -88,13 +90,14 @@ body {
 											<input type="submit" value="Cancel">
 										</form>
 									</c:if>
-							</c:otherwise>
-						</c:choose></td>
-				</tr>
-				<%-- </c:if> --%>
-			</c:forEach>
-		</tbody>
-	</table>
-	<a class="text-info" href="/createPlaydate">Start a playdate!</a>
+								</c:otherwise>
+							</c:choose></td>
+					</tr>
+					<%-- </c:if> --%>
+				</c:forEach>
+			</tbody>
+		</table>
+		<a class="text-info" href="/createPlaydate">Start a playdate!</a>
+	</div>
 </body>
 </html>
